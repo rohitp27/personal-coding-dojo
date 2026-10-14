@@ -12,12 +12,22 @@
 
 void insertionSort(std::vector<int>& arr) {
     int start=0;
-    int end = 0;
 
-    for (int i = 0; i < arr.size() - 1; i++) {
-        for (int j = 0; j < arr.size() - 1; j++) {
-            int key = j+1;
+    for (int end = 0; end + 1 < (int)arr.size(); end++) {
+        int key = arr[end+1];
+        int insert_index = 0;
+        // find insert_index
+        for (int compare_index = end; compare_index >= start; compare_index--) {
+            if (arr[compare_index] < key) {
+                insert_index = compare_index + 1;
+                break;
+            }
         }
+        // shift right and insert
+        for (int current = end; current >= insert_index; current--) {
+            arr[current+1] = arr[current];
+        }
+        arr[insert_index] = key;
     }
 }
 
