@@ -40,49 +40,6 @@ struct ListNode {
     ListNode* next;
 };
 
-//@REF
-ListNode* reverseKGroup(ListNode* head, int k) {
-    ListNode dummy{0, head};
-    ListNode* prev = &dummy;
-    while (true) {
-        ListNode* probe = prev->next;
-        int cnt = 0;
-        while (probe && cnt < k) {
-            probe = probe->next;
-            cnt++;
-        }
-        if (cnt < k) break;
-        ListNode* groupStart = prev->next;
-        ListNode* cur = groupStart;
-        ListNode* before = probe;  // node after the group
-        for (int i = 0; i < k; i++) {
-            ListNode* nxt = cur->next;
-            cur->next = before;
-            before = cur;
-            cur = nxt;
-        }
-        prev->next = before;
-        prev = groupStart;
-    }
-    return dummy.next;
-}
-
-ListNode* cycleStart(ListNode* head) {
-    ListNode *slow = head, *fast = head;
-    while (fast && fast->next) {
-        slow = slow->next;
-        fast = fast->next->next;
-        if (slow == fast) {
-            ListNode* p = head;
-            while (p != slow) {
-                p = p->next;
-                slow = slow->next;
-            }
-            return p;
-        }
-    }
-    return nullptr;
-}
 ListNode* reverseKGroup(ListNode* head, [[maybe_unused]] int k) {
     // TODO
     return head;

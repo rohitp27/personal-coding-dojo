@@ -30,23 +30,6 @@
 #include <algorithm>
 #include <vector>
 
-//@REF
-long long largestRectangle(const std::vector<int>& h) {
-    std::vector<int> st;
-    long long best = 0;
-    int n = static_cast<int>(h.size());
-    for (int i = 0; i <= n; i++) {
-        int cur = (i == n) ? 0 : h[i];
-        while (!st.empty() && h[st.back()] >= cur) {
-            long long height = h[st.back()];
-            st.pop_back();
-            long long left = st.empty() ? -1 : st.back();
-            best = std::max(best, height * (i - left - 1));
-        }
-        st.push_back(i);
-    }
-    return best;
-}
 long long largestRectangle([[maybe_unused]] const std::vector<int>& h) {
     // TODO
     return -1;

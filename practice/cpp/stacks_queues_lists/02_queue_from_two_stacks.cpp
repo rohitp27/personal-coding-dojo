@@ -30,34 +30,6 @@
 #include <random>
 #include <vector>
 
-//@REF
-class MyQueue {
-public:
-    void push(int x) { in_.push_back(x); }
-    int pop() {
-        shift();
-        int v = out_.back();
-        out_.pop_back();
-        return v;
-    }
-    int peek() {
-        shift();
-        return out_.back();
-    }
-    bool empty() const { return in_.empty() && out_.empty(); }
-    size_t size() const { return in_.size() + out_.size(); }
-
-private:
-    void shift() {
-        if (out_.empty())
-            while (!in_.empty()) {
-                out_.push_back(in_.back());
-                in_.pop_back();
-            }
-    }
-    std::vector<int> in_;   // receives pushes
-    std::vector<int> out_;  // serves pops; its back() is the queue front
-};
 class MyQueue {
 public:
     void push([[maybe_unused]] int x) {
