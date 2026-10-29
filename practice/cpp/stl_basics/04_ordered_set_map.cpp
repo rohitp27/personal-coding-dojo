@@ -33,26 +33,39 @@
 
 std::vector<int> uniqueSorted(const std::vector<int>& v) {
     (void)v;
-    // TODO
-    return {-1};
+    std::set<int> s(v.begin(), v.end());
+    return std::vector<int> (s.begin(), s.end());
 }
 
 int smallestAtLeast(const std::set<int>& s, int x) {
     (void)s; (void)x;
-    // TODO
-    return -2;
+    auto it = s.lower_bound(x);
+    if (it == s.end()) return -1;
+    else return *it;
 }
 
 int countInRange(const std::set<int>& s, int lo, int hi) {
     (void)s; (void)lo; (void)hi;
-    // TODO
-    return -1;
+    if (lo > hi) return 0;
+    auto lower = s.lower_bound(lo);
+    if (lower == s.end()) return 0;
+    auto upper = s.upper_bound(hi);
+    return std::distance(lower, upper);
 }
 
 std::vector<std::string> formatAges(const std::map<std::string, int>& ages) {
     (void)ages;
-    // TODO
-    return {"?"};
+    std::vector<std::string> output;
+    for (auto it = ages.begin(); it != ages.end(); it++){
+        std::string str = it->first + "=" + std::to_string(it->second);
+        output.push_back(str);
+    }
+    // for (auto it : ages) {
+    //     std::string name = it.first;
+    //     int age = it.second;
+    //     output.push_back(name + "=" + std::to_string(age));
+    // }
+    return output;
 }
 
 int main() {

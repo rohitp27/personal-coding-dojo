@@ -27,31 +27,80 @@
 #include <cctype>
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 #include "check.h"
 
+std::unordered_set<char> VOWELS = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+
 int countVowels(const std::string& s) {
     (void)s;
-    // TODO
-    return -1;
+    int count = 0;
+    for (char c : s) {
+        if (VOWELS.find(c) != VOWELS.end()) count++;
+    }
+    return count;
 }
 
 std::string extractAfter(const std::string& s, const std::string& marker) {
     (void)s; (void)marker;
     // TODO
-    return "?";
+    auto pos = s.find(marker);
+    if (pos == std::string::npos) {
+        return "";
+    }
+    if (pos == s.length()-1) {
+        return "";
+    }
+    return s.substr(pos + marker.size());
 }
 
 std::string joinWithComma(const std::vector<std::string>& parts) {
     (void)parts;
-    // TODO
-    return "?";
+    if (parts.size() == 0) {
+        return "";
+    }
+    if (parts.size() == 1) {
+        return parts.at(0);
+    }
+    std::string s = "";
+    size_t i;
+    for(i = 0; i < parts.size()-1; i++) {
+        s += parts.at(i) + ", ";
+    }
+    s += parts.at(i);
+    return s;
+}
+
+bool isUpper(const char c) {
+    return 'A' <= c && c <= 'Z';
+}
+
+bool isLower(const char c) {
+    return 'a' <= c && c <= 'z';
 }
 
 std::string capitalizeWords(std::string s) {
     (void)s;
     // TODO
-    return "?";
+    bool CAPITALIZE = true;
+    for(int i = 0; i < s.length(); i++) {
+        char current = s[i];
+        if (CAPITALIZE && isLower(current)) {
+            // printf("%c CAP\n", c);
+            CAPITALIZE = false;
+            current -= 32;
+            s[i] = current;
+        } else if (isUpper(current)) {
+            current += 32;
+            s[i] = current;
+        } else if (isLower(current)) {
+            // do nothing
+        } else {
+            CAPITALIZE = true;
+        }
+    }
+    return s;
 }
 
 int main() {

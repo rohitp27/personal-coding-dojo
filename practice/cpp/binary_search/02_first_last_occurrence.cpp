@@ -18,36 +18,128 @@
 // lowerBound(target) and the last is lowerBound(target + 1) - 1 (watch out for overflow at
 // INT_MAX, or write a second helper for "first index > x").
 //
-// Run: make run FILE=curriculum/102_fundamentals/binary_search/02_first_last_occurrence.cpp
+// Run: make run FILE=practice/cpp/binary_search/02_first_last_occurrence.cpp
 
 #include "check.h"
 
 #include <climits>
 #include <utility>
 #include <vector>
+#include <assert.h>
 
 using P = std::pair<int, int>;
 
-//@REF
-// first index with a[i] > x (strict) when strict, else first index with a[i] >= x
-static int bound(const std::vector<int>& a, int x, bool strict) {
-    int lo = 0, hi = static_cast<int>(a.size());
-    while (lo < hi) {
-        int mid = lo + (hi - lo) / 2;
-        if (strict ? a[mid] <= x : a[mid] < x) lo = mid + 1;
-        else hi = mid;
+int binarySearch(const std::vector<int>& a, const int target, int start, int end){
+    int left = start;
+    int right = end;
+    while(left <= right){
+        assert(left >= 0 && (size_t) left <= a.size());
+        assert(right >= 0 && (size_t) right <= a.size());
+        if (left == right) {
+            if (a[left] == target) {
+                return left;
+            } else {
+                return -1;
+            }
+        }
+        int size = right-left+1;
+        int midpt = left + (size/2);
+        if (a[midpt] == target) {
+            return midpt;
+        } else if (a[midpt] < target) {
+            left = midpt+1;
+        } else {
+            right = midpt-1;
+        }
     }
-    return lo;
+    return -1;
 }
 
-P equalRange(const std::vector<int>& a, int target) {
-    int first = bound(a, target, false);
-    if (first == static_cast<int>(a.size()) || a[first] != target) return {-1, -1};
-    return {first, bound(a, target, true) - 1};
+int max(int a, int b) {
+    return (a<b)?b:a;
 }
+
+int min(int a, int b) {
+    return (b<a)?b:a;
+}
+
+bool withinRange(const std::vector<int>& a, const int index){
+    return index >= 0 && (size_t) index < a.size();
+}
+
+int findRightRange(const std::vector<int>& a, const int target, int start, int end) {
+    int rightMost = start-1;
+    assert(withinRange(a, rightMost));
+    assert(a[rightMost] == target);
+    int left = start;
+    int right = end;
+    while (left <= right) {
+        if (left == right) {
+            assert(withinRange(a, left));
+            if (a[right] == target) {
+                rightMost = max(rightMost, right);
+            } else {
+                break;
+            }
+        }
+        int size = right-left+1;
+        int midpt = left+size/2;
+        assert(withinRange(a, midpt));
+        int midval = a[midpt];
+        if (midval == target) {
+            // found it.
+            rightMost = max(rightMost, midpt);
+            // search the right of it
+            left = midpt+1;
+        } else if (midval < target) {
+            left = midpt+1;
+        } else {
+            right = midpt-1;
+        }
+    }
+    return rightMost;
+}
+
+int findLeftRange(const std::vector<int>& a, const int target, int start, int end) {
+    int leftMost = end+1;
+    assert(withinRange(a, leftMost));
+    assert(a[leftMost] == target);
+    int left = start;
+    int right = end;
+
+    while (left <= right) {
+        if (left == right) {
+            assert(withinRange(a, left));
+            if (a[left] == target) {
+                leftMost = min(leftMost, left);
+            } 
+            break;
+        }
+        int size = right-left+1;
+        int midpt = left + size/2;
+        assert(withinRange(a, midpt));
+        int midval = a[midpt];
+        if (midval == target) {
+            leftMost = min(leftMost, midpt);
+            right = midpt-1;
+        } else if (midval < target) {
+            left = midpt+1;
+        } else {
+            right = midpt-1;
+        }
+    }
+    return leftMost;
+}
+
 P equalRange([[maybe_unused]] const std::vector<int>& a, [[maybe_unused]] int target) {
-    // TODO
-    return {-2, -2};
+    int currentIndex = binarySearch(a, target, 0, a.size()-1);
+    if (currentIndex == -1) {
+        return {-1, -1};
+    } 
+    // means it exists, and can exist both left and right
+    int leftIndex = findLeftRange(a, target, 0, currentIndex-1);
+    int rightIndex = findRightRange(a, target, currentIndex+1, a.size()-1);
+    return {leftIndex, rightIndex};
 }
 
 int main() {

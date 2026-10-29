@@ -20,7 +20,7 @@
 // ways(i) the first time you compute it (e.g. in a vector<long long> initialised to -1 and
 // passed by reference) and return the stored value on every later call.
 //
-// Run: make run FILE=curriculum/102_fundamentals/recursion_and_sorting/01_memo_climb_stairs.cpp
+// Run: make run FILE=practice/cpp/recursion_and_sorting/01_memo_climb_stairs.cpp
 
 #include "check.h"
 

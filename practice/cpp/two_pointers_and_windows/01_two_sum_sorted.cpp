@@ -16,7 +16,7 @@
 // left index right can help; if it is too big, only moving the right index left can.
 // Convince yourself why you never skip a valid pair.
 //
-// Run: make run FILE=curriculum/102_fundamentals/two_pointers_and_windows/01_two_sum_sorted.cpp
+// Run: make run FILE=practice/cpp/two_pointers_and_windows/01_two_sum_sorted.cpp
 
 #include "check.h"
 

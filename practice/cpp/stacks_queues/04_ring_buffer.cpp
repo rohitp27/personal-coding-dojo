@@ -29,37 +29,52 @@
 
 class RingBuffer {
 public:
-    explicit RingBuffer(size_t capacity) : buf_(capacity) {}
+    explicit RingBuffer(size_t capacity) : buf_(capacity) {
+        buffer = std::vector<int> (capacity);
+        head = 0;
+        tail = 0;
+    }
 
     bool push(int x) {
+        if (full()) return false;
         (void)x;
-        // TODO
-        return false;
+        store_at(tail++, x);
+        return true;
     }
 
     bool pop(int& out) {
+        if (empty()) return false;
         (void)out;
-        // TODO
-        return false;
+        out = value_at(head++);
+        return true;
     }
 
     size_t size() const {
         // TODO
+        return tail-head;
         return 999;
     }
 
     bool empty() const {
-        // TODO
-        return false;
+        return (head == tail);
     }
 
     bool full() const {
-        // TODO
-        return true;
+        return size() >= capacity;
     }
 
 private:
-    std::vector<int> buf_;
+    int value_at(size_t index) {
+        return buffer[index % capacity];
+    }
+
+    void store_at(size_t index, int value) {
+        buffer[index % capacity] = value;
+    }
+
+    std::vector<int> buffer;
+    size_t head;
+    size_t tail;
     [[maybe_unused]] size_t head_ = 0;
     [[maybe_unused]] size_t count_ = 0;
 };

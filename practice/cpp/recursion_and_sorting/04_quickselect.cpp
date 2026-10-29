@@ -22,7 +22,7 @@
 //      partition do with elements EQUAL to the pivot so an all-equal array does not degrade?
 //   3. Can you write it as a loop instead of recursion so stack depth is not a concern?
 //
-// Run: make run FILE=curriculum/102_fundamentals/recursion_and_sorting/04_quickselect.cpp
+// Run: make run FILE=practice/cpp/recursion_and_sorting/04_quickselect.cpp
 
 #include "check.h"
 

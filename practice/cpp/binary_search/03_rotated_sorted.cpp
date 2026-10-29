@@ -21,31 +21,120 @@
 //      or 2, and about target == a[lo])?
 //   3. What input breaks the "one half is sorted" argument, and why is it excluded here?
 //
-// Run: make run FILE=curriculum/102_fundamentals/binary_search/03_rotated_sorted.cpp
+// Run: make run FILE=practice/cpp/binary_search/03_rotated_sorted.cpp
 
 #include "check.h"
 
 #include <vector>
+#include <assert.h>
 
-//@REF
-int searchRotated(const std::vector<int>& a, int target) {
-    int lo = 0, hi = static_cast<int>(a.size()) - 1;
-    while (lo <= hi) {
-        int mid = lo + (hi - lo) / 2;
-        if (a[mid] == target) return mid;
-        if (a[lo] <= a[mid]) {  // left half sorted
-            if (a[lo] <= target && target < a[mid]) hi = mid - 1;
-            else lo = mid + 1;
-        } else {  // right half sorted
-            if (a[mid] < target && target <= a[hi]) lo = mid + 1;
-            else hi = mid - 1;
+int getIndex(const std::vector<int>& a, const int index) {
+    assert(!a.empty());
+    return index % a.size();
+}
+
+int getValue(const std::vector<int>& a, const int index) {
+    int idx = getIndex(a, index);
+    return a[idx];
+}
+
+void printArray(const std::vector<int>& a) {
+    for (int elem : a) {
+        printf("%d -> ", elem);
+    }
+    printf("\n");
+}
+
+int findPivot(const std::vector<int>& a) {
+    int left = 0;
+    int right = a.size()-1;
+    if (a[left] <= a[right]) {
+        // already sorted, send 0
+        return left;
+    }
+    while(left <= right) {
+        // printf("left %d, getValLeft %d, right %d, getValRight %d\n", left, getValue(a, left), right, getValue(a, right));
+        if (getValue(a, left) <= getValue(a, right)) {
+            assert(getIndex(a, left) == left);
+            return left;
+        }
+        if (left == right) {
+            // this is the pivot
+            return left;
+        }
+        // int size = right-left+1;
+        int midpt = left + (right-left)/2; // lower midpt
+        int midVal = a[midpt];
+        // printf("Midpt %d, midval %d, a[right] %d\n", midpt, midVal, a[right]);
+        // printArray(a);
+        assert(midVal == getValue(a, midpt));
+        if (midVal > getValue(a, right)) {
+            left = midpt + 1;
+        } else {
+            right = midpt;
         }
     }
     return -1;
 }
+
+int searchInVector(const std::vector<int>& a, int target, int left, int right) {
+    // standard binary search
+    // printArray(a);
+    // printf("target %d, left %d, left idx %d, right %d, right idx %d\n", target, left, getIndex(a, left), right , getIndex(a, right));
+    assert(left <= right);
+    // assert();
+    assert(getValue(a, left) <= getValue(a, right));
+
+    while (left <= right) {
+        // printf("left %d, leftVal %d, right %d, rightVal %d\n", left, getValue(a, left), right, getValue(a, right));
+        if (left == right) {
+            int val = getValue(a, left);
+            if (val == target) {
+                return getIndex(a, left);
+            } else {
+                return -1;
+            }
+        }
+        int size = right-left+1;
+        int midIndex = left + size/2;
+        int midVal = getValue(a, midIndex);
+        // printf("Midpt %d, midVal %d\n", midIndex, midVal);
+        if (midVal == target) {
+            return getIndex(a, midIndex);
+        } else if (midVal < target) {
+            // search right
+            left = midIndex+1;
+        } else {
+            // search left
+            right = midIndex-1;
+        }
+    }
+    return -1;
+}
+
 int searchRotated([[maybe_unused]] const std::vector<int>& a, [[maybe_unused]] int target) {
-    // TODO
-    return -2;
+    if (a.empty()) {
+        return -1;
+    }
+    if (a.size() == 1) {
+        if (a[0] == target) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+    int pivot = findPivot(a);
+    if (pivot == -1) {
+        printf("Bad pivot\n\n");
+        printArray(a);
+    }
+    assert(pivot != -1);
+    int startIndex = pivot;
+    assert(pivot == getIndex(a, startIndex));
+    int endIndex = pivot+(a.size()-1);
+    int returned = searchInVector(a, target, startIndex, endIndex);
+    // printf("Ans : %d\n", returned);
+    return returned;
 }
 
 // Build the sorted sequence 0, 2, 4, ... (n values) rotated left by r.

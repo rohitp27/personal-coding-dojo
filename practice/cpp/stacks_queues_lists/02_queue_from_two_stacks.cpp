@@ -21,7 +21,7 @@
 // Only refill out_ from in_ when out_ is empty - and then move ALL of in_. Why does the
 // order come out right, and why is the cost amortized O(1)?
 //
-// Run: make run FILE=curriculum/102_fundamentals/stacks_queues_lists/02_queue_from_two_stacks.cpp
+// Run: make run FILE=practice/cpp/stacks_queues_lists/02_queue_from_two_stacks.cpp
 
 #include "check.h"
 

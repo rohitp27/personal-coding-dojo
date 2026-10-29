@@ -22,7 +22,7 @@
 //   3. How do you guarantee the LEFTMOST shortest window on ties, and what must you
 //      return when t is longer than s or t is empty?
 //
-// Run: make run FILE=curriculum/102_fundamentals/two_pointers_and_windows/04_variable_window.cpp
+// Run: make run FILE=practice/cpp/two_pointers_and_windows/04_variable_window.cpp
 
 #include "check.h"
 

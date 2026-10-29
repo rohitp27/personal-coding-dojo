@@ -35,31 +35,42 @@ public:
 
     bool push(int x) {
         (void)x;
-        // TODO
-        return false;
+        if (full()){
+            return false;
+        } else {
+            data_[size_++] = x;
+            return true;
+        }
     }
 
     int pop() {
-        // TODO
-        return -1;
+        assertExists();
+        int ret = data_[--size_];
+        return ret;
     }
 
     int top() const {
-        // TODO
-        return -1;
+        assertExists();
+        return data_[size_-1];
     }
 
     bool empty() const {
-        // TODO
-        return false;
+        return size_ == 0;
     }
 
     int size() const {
-        // TODO
-        return -1;
+        return size_;
     }
 
 private:
+    bool full() const {
+        return size() == CAP;
+    }
+
+    void assertExists() const {
+        if (empty()) throw std::out_of_range("Empty");
+    }
+
     [[maybe_unused]] int data_[CAP];
     [[maybe_unused]] int size_ = 0;
 };

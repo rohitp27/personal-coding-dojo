@@ -19,7 +19,7 @@
 //   3. If you process left to right, what exactly does the map need to remember
 //      so each pair is counted once and an element never pairs with itself?
 //
-// Run: make run FILE=curriculum/102_fundamentals/hashing/03_count_pairs_with_sum.cpp
+// Run: make run FILE=practice/cpp/hashing/03_count_pairs_with_sum.cpp
 
 #include "check.h"
 
@@ -28,21 +28,18 @@
 #include <unordered_map>
 #include <vector>
 
-//@REF
-long long countPairsWithSum(const std::vector<int>& a, long long k) {
-    std::unordered_map<long long, long long> seen;
-    seen.reserve(a.size() * 2);
-    long long total = 0;
-    for (int x : a) {
-        auto it = seen.find(k - x);
-        if (it != seen.end()) total += it->second;
-        seen[x]++;
-    }
-    return total;
-}
 long long countPairsWithSum([[maybe_unused]] const std::vector<int>& a, [[maybe_unused]] long long k) {
-    // TODO
-    return -1;
+    std::unordered_map<long long, size_t> mp;
+    long long answer = 0;
+    for(size_t i = 0; i < a.size(); i++) {
+        long long current = a[i];
+        long long complement = k - current;
+        if (mp.find(complement) != mp.end()) {
+            answer += mp[complement];
+        } 
+        mp[current] += 1;
+    }
+    return answer;
 }
 
 int main() {

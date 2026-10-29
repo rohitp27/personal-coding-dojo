@@ -28,13 +28,63 @@
 
 std::queue<int> reverseFirstK(std::queue<int> q, int k) {
     (void)q; (void)k;
-    // TODO
-    return std::queue<int>({-1});
+    int untouched = q.size() - k;
+    int touched = k;
+    std::stack<int> st;
+    if (q.empty()) return q;
+    while (touched > 0 && !q.empty()) {
+        int top = q.front();
+        st.push(top);
+        q.pop();
+        touched--;
+    }
+    while (!st.empty()) {
+        int top = st.top();
+        q.push(top);
+        st.pop();
+    }
+    while (untouched > 0 && ! q.empty()) {
+        q.push(q.front());
+        q.pop();
+        untouched--;
+    }
+    return q;
 }
 
 int lastRemaining(int n, int k) {
     (void)n; (void)k;
-    // TODO
+    std::vector<int> v;
+    std::vector<int> other;
+    for (int i = 0; i < n; i++){
+        v.push_back(i);
+    }
+    int remaining = n;
+    int ptr = 0;
+    int counter = k;
+    while(remaining > 1){
+        if (v[ptr] == -1) {
+            // was already removed
+            ptr = (ptr+1) % n;
+            continue;
+        } else { //this is an actual number
+                    // printf("at %d, ptr %d, ctr %d , remaining %d ->\n", v[ptr], ptr, counter, remaining);
+
+            counter--;
+            if (counter == 0) {
+                // delete number
+                remaining--;
+                v[ptr] = -1;
+                // printf("\tDelete \n");
+                //reset counter
+                counter = k;
+            }
+            // move forward
+            ptr = (ptr+1) % n;
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        if ( v[i] != -1 ) return v[i]+1;
+    }
     return -1;
 }
 

@@ -20,7 +20,7 @@
 // signature is faster), then use a hash map from key to group index so groups come
 // out in first-appearance order.
 //
-// Run: make run FILE=curriculum/102_fundamentals/hashing/02_group_anagrams.cpp
+// Run: make run FILE=practice/cpp/hashing/02_group_anagrams.cpp
 
 #include "check.h"
 
@@ -30,27 +30,62 @@
 #include <vector>
 
 using Groups = std::vector<std::vector<std::string>>;
+using Group = std::vector<std::string>;
 
-//@REF
-Groups groupAnagrams(const std::vector<std::string>& words) {
-    Groups groups;
-    std::unordered_map<std::string, size_t> idx;
-    for (const auto& w : words) {
-        std::string key = w;
-        std::sort(key.begin(), key.end());
-        auto it = idx.find(key);
-        if (it == idx.end()) {
-            idx[key] = groups.size();
-            groups.push_back({w});
-        } else {
-            groups[it->second].push_back(w);
+class Grouper {
+    public: 
+        explicit Grouper(const std::vector<std::string>& _words) : words(_words) {}
+
+        Groups getGroups(){
+            // iterate over all words
+            createGroups();
+            return groups;
         }
-    }
-    return groups;
-}
+
+    private:
+        const std::vector<std::string>& words;
+        std::unordered_map<std::string, size_t > groupMap;
+        Groups groups;
+
+        std::string getKey(const std::string& word) {
+            std::vector<int> counts(26, 0);
+            for (size_t i = 0; i < word.size(); i++) {
+                char c = word[i];
+                counts[c-'a'] += 1;
+            }
+            std::string key = "";
+            for(size_t i = 0; i < counts.size(); i++) {
+                key += std::to_string(counts[i]) + "#";
+            }
+            return key;
+        }
+
+        void createGroups() {
+            for(const std::string& word : words) {
+                std::string key = getKey(word);
+                // std::string key(word);
+                // std::sort(key.begin(), key.end());
+                // Group group;
+                if (groupMap.find(key) != groupMap.end()) {
+                    // group exists
+                    // add to group vector
+                    size_t groupIndex = groupMap[key]; // value is the key
+                    groups[groupIndex].push_back(word); // add to the group
+                } else {
+                    // init the group
+                    size_t groupIndex = groups.size(); //current size before inserting
+                    groupMap[key] = groupIndex; // set the key
+                    Group newGroup; 
+                    newGroup.push_back(word); // add to the group
+                    groups.push_back(newGroup);
+                }
+            }
+        }
+};
+
 Groups groupAnagrams([[maybe_unused]] const std::vector<std::string>& words) {
-    // TODO
-    return {};
+    Grouper g{words};
+    return g.getGroups();
 }
 
 int main() {

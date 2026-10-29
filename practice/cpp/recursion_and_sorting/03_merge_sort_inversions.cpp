@@ -22,7 +22,7 @@
 //      inversions (and the sort stays stable)?
 //   3. What is the largest possible inversion count for n elements, and which type holds it?
 //
-// Run: make run FILE=curriculum/102_fundamentals/recursion_and_sorting/03_merge_sort_inversions.cpp
+// Run: make run FILE=practice/cpp/recursion_and_sorting/03_merge_sort_inversions.cpp
 
 #include "check.h"
 

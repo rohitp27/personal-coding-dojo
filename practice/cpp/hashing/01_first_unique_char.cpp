@@ -14,7 +14,7 @@
 // Hint: one pass to count how often each letter occurs, then a second pass over
 // the string (not over the counts) to find the first letter whose count is 1.
 //
-// Run: make run FILE=curriculum/102_fundamentals/hashing/01_first_unique_char.cpp
+// Run: make run FILE=practice/cpp/hashing/01_first_unique_char.cpp
 
 #include "check.h"
 

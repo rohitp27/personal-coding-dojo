@@ -22,7 +22,7 @@
 // array or swapping into place), emit when the current vector is full. Remember to undo
 // the choice (pop_back / unmark) after the recursive call returns.
 //
-// Run: make run FILE=curriculum/102_fundamentals/recursion_and_sorting/02_subsets_permutations.cpp
+// Run: make run FILE=practice/cpp/recursion_and_sorting/02_subsets_permutations.cpp
 
 #include "check.h"
 

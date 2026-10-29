@@ -18,16 +18,33 @@
 // bracket, the stack must be non-empty and its top must be the matching opener. What must
 // be true of the stack when the scan ends?
 //
-// Run: make run FILE=curriculum/102_fundamentals/stacks_queues_lists/01_balanced_brackets.cpp
+// Run: make run FILE=practice/cpp/stacks_queues_lists/01_balanced_brackets.cpp
 
 #include "check.h"
 
 #include <string>
 #include <vector>
 
+bool isUpper(char c) {
+    return c == '(' || c == '[' || c == '{';
+}
+
+bool isMatching(char a, char b) {
+    return (a=='(' && b == ')') || (a=='[' && b == ']') || (a=='{' && b == '}');
+}
+
 bool isBalanced([[maybe_unused]] const std::string& s) {
-    // TODO
-    return false;
+    std::stack<int> stk;
+    for (char c : s) {
+        if (isUpper(c)) {
+            stk.push(c);
+        } else {
+            if (stk.empty()) return false;
+            if (!isMatching(stk.top(), c)) return false;
+            stk.pop();
+        }
+    }
+    return stk.empty();
 }
 
 int main() {

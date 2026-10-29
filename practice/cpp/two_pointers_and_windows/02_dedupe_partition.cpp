@@ -19,7 +19,7 @@
 // position, not with its predecessor. Why does that rule also handle "at most one"
 // and "at most k" if you change the 2?
 //
-// Run: make run FILE=curriculum/102_fundamentals/two_pointers_and_windows/02_dedupe_partition.cpp
+// Run: make run FILE=practice/cpp/two_pointers_and_windows/02_dedupe_partition.cpp
 
 #include "check.h"
 

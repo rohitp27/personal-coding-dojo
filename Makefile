@@ -1,5 +1,16 @@
 BUILD := build
 CXXFLAGS := -std=c++20 -Wall -Wextra -g -pthread -I common/cpp
+CXX = g++
+
+# Some Apple Command Line Tools installations keep libc++ headers only in the SDK.
+ifeq ($(shell uname -s),Darwin)
+ifneq ($(findstring Apple clang,$(shell $(CXX) --version 2>/dev/null)),)
+SDK_PATH := $(shell xcrun --show-sdk-path)
+ifneq ($(wildcard $(SDK_PATH)/usr/include/c++/v1/iomanip),)
+CXXFLAGS += -isystem $(SDK_PATH)/usr/include/c++/v1
+endif
+endif
+endif
 
 .PHONY: run test clean
 
@@ -9,7 +20,7 @@ ifndef FILE
 endif
 ifeq ($(suffix $(FILE)),.cpp)
 	@mkdir -p $(BUILD)
-	g++ $(CXXFLAGS) -o $(BUILD)/$(basename $(notdir $(FILE))) $(FILE)
+	$(CXX) $(CXXFLAGS) -o $(BUILD)/$(basename $(notdir $(FILE))) $(FILE)
 	@./$(BUILD)/$(basename $(notdir $(FILE)))
 else ifeq ($(suffix $(FILE)),.java)
 	@mkdir -p $(BUILD)
@@ -29,7 +40,7 @@ endif
 	@pass=0; fail=0; \
 	for f in $$(find $(DIR) -name '*.cpp' | sort); do \
 		b=$(BUILD)/$$(basename $$f .cpp); \
-		if g++ $(CXXFLAGS) -o $$b $$f 2>/dev/null && perl -e 'alarm 20; exec @ARGV' $$b >/dev/null 2>&1; then \
+		if $(CXX) $(CXXFLAGS) -o $$b $$f 2>/dev/null && perl -e 'alarm 20; exec @ARGV' $$b >/dev/null 2>&1; then \
 			echo "PASS  $$f"; pass=$$((pass+1)); \
 		else \
 			echo "FAIL  $$f"; fail=$$((fail+1)); \

@@ -26,7 +26,7 @@
 //      one pointer at the head and stepping both one node at a time make them meet exactly
 //      at the cycle start?
 //
-// Run: make run FILE=curriculum/102_fundamentals/stacks_queues_lists/03_linked_list_ops.cpp
+// Run: make run FILE=practice/cpp/stacks_queues_lists/03_linked_list_ops.cpp
 
 #include "check.h"
 
@@ -34,20 +34,139 @@
 #include <deque>
 #include <numeric>
 #include <vector>
+#include <assert.h>
 
 struct ListNode {
     int val;
     ListNode* next;
 };
 
-ListNode* reverseKGroup(ListNode* head, [[maybe_unused]] int k) {
-    // TODO
-    return head;
+int listSize(ListNode* head) {
+    int count = 0;
+    ListNode* current = head;
+    while(current != nullptr) {
+        count++;
+        current = current->next;
+    }
+    return count;
 }
 
-ListNode* cycleStart([[maybe_unused]] ListNode* head) {
-    // TODO
-    return nullptr;
+ListNode* reverseList(ListNode* previous, ListNode* current) {   
+    if (current == nullptr) return previous;
+
+    ListNode* oldNext = current->next;
+    current->next = previous;
+    return reverseList(current, oldNext);
+}
+
+ListNode* reverseListWithCheck(ListNode* head, int k) {
+    assert(listSize(head) == k);
+    return reverseList(nullptr, head);
+} 
+
+ListNode* getLastNode(ListNode* head) {
+    assert(head != nullptr);
+    if (head -> next == nullptr) return head;
+    return getLastNode(head->next);
+}
+
+ListNode* reverseKGroup(ListNode* head, int k, int remainingSegments) {
+    if (remainingSegments == 0) {
+        return head;
+    }
+    // find seg start/end whatever
+    ListNode* segStart = head;
+    ListNode* segEnd = nullptr;
+    ListNode* segTail = segStart;
+
+    int hops = 0;
+    while (hops++ < k) { 
+        segEnd = segTail;
+        segTail = segTail->next;
+    }
+    // splice the tail off
+    assert(segEnd->next == segTail);
+    segEnd->next = nullptr;
+    ListNode* reversed = reverseListWithCheck(segStart, k);
+    assert(getLastNode(reversed) == segStart);
+    assert(reversed == segEnd); // last node should be new head of 'reversed'
+    // reattach at bottom
+    ListNode* newTail = reverseKGroup(segTail, k, --remainingSegments);
+    segStart->next = newTail;
+    return segEnd;
+}
+
+ListNode* reverseKGroup(ListNode* head, int k) {
+    int size = listSize(head);
+    if (size < k) return head; // no flipping;
+    if (k == 1) return head; // k=1 means every element flips in place
+
+    int segments = size / k;
+    return reverseKGroup(head, k, segments);
+}
+
+ListNode* moveSlowPtr(ListNode* slowptr) {
+    if (slowptr == nullptr) {
+        return nullptr;
+    }
+    return slowptr->next;
+}
+
+ListNode* moveFastPtr(ListNode* fastptr) {
+    return moveSlowPtr(moveSlowPtr(fastptr));
+}
+
+ListNode* getCycleMeetup(ListNode* head) {
+    ListNode* fastPtr = head;
+    ListNode* slowPtr = head;
+
+    while(true) { // some condition here
+        // move slow ptr
+        slowPtr = moveSlowPtr(slowPtr);
+        fastPtr = moveFastPtr(fastPtr);
+        if (slowPtr == nullptr || fastPtr == nullptr) {
+            // reached end
+            return nullptr; 
+        }
+        else if (slowPtr == fastPtr) {
+            // only possible if there was a cycle
+            return slowPtr;
+        } else {
+            // nothing here for now
+        }
+    }
+}
+
+// assume a cycle exists
+ListNode* getCycleStart(ListNode* head, ListNode* meetupNode) {
+    ListNode* ptrA = head;
+    ListNode* ptrB = meetupNode;
+    // printf("Checking start pt on : %d, %d \n", ptrA->val, ptrB->val);
+    while (true)
+    {
+        ptrA = moveSlowPtr(ptrA);
+        ptrB = moveSlowPtr(ptrB);
+        assert(ptrA != nullptr);
+        assert(ptrB != nullptr);
+        if (ptrA == ptrB) {
+            return ptrA;
+        }
+    }
+}
+
+ListNode* cycleStart( ListNode* head) {
+    ListNode* cycleCheckMeetup = getCycleMeetup(head);
+    if (cycleCheckMeetup == nullptr) {
+        return nullptr;
+    }
+    if (cycleCheckMeetup == head) {
+        return head;
+    }
+    // printf("Meet point at : %d \n", head->val);
+    // run two ptrs from ot
+    ListNode* cycleStartNode = getCycleStart(head, cycleCheckMeetup);
+    // printf("Start point at : %d \n", head->val);
+    return cycleStartNode;
 }
 
 // ---- test helpers (nodes live in a pool so the tests never leak) ----

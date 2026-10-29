@@ -20,7 +20,7 @@
 //      to your bookkeeping (not just the counter)?
 //   3. What are the edge cases for k relative to n, and for an empty array?
 //
-// Run: make run FILE=curriculum/102_fundamentals/two_pointers_and_windows/03_fixed_window.cpp
+// Run: make run FILE=practice/cpp/two_pointers_and_windows/03_fixed_window.cpp
 
 #include "check.h"
 

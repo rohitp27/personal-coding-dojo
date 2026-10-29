@@ -31,25 +31,53 @@
 int sum(const std::vector<int>& v) {
     (void)v;
     // TODO
-    return -1;
+    int sum = 0;
+    if (v.empty()) {
+        return sum;
+    }
+    for (int elem : v) {
+        sum += elem;
+    }
+    return sum;
 }
 
 std::vector<int> removeValue(std::vector<int> v, int x) {
     (void)v; (void)x;
     // TODO
-    return {-1};
+    std::vector<int> output;
+    for (int elem : v ) {
+        if (elem != x ) {
+            output.push_back(elem);
+        }
+    }
+    return output;
 }
 
 std::vector<int> insertAfterFirst(std::vector<int> v, int target, int val) {
     (void)v; (void)target; (void)val;
     // TODO
-    return {-1};
+    bool found = false;
+    std::vector<int> output;
+    for(int elem : v) {
+        output.push_back(elem);
+        if (!found && elem == target){
+            output.push_back(val);
+            found = true;
+        }
+    }
+    if (!found){
+        output.push_back(val);
+        found = true;
+    }
+    return output;
 }
 
 std::vector<int> sortedDesc(std::vector<int> v) {
     (void)v;
     // TODO
-    return {-1};
+    std::vector<int> output(v);
+    std::sort(output.begin(), output.end(), [](const int& a, const int& b) -> bool {return a>b;});
+    return output;
 }
 
 int main() {

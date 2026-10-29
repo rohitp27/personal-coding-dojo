@@ -15,26 +15,66 @@
 // present, and say the loop invariant out loud before writing code. Compute the middle as
 // lo + (hi - lo) / 2, and make sure every branch shrinks the range so the loop terminates.
 //
-// Run: make run FILE=curriculum/102_fundamentals/binary_search/01_binary_search_classic.cpp
+// Run: make run FILE=practice/cpp/binary_search/01_binary_search_classic.cpp
 
 #include "check.h"
 
 #include <vector>
+#include <assert.h>
 
-//@REF
-int binarySearch(const std::vector<int>& a, int target) {
-    int lo = 0, hi = static_cast<int>(a.size()) - 1;
-    while (lo <= hi) {
-        int mid = lo + (hi - lo) / 2;
-        if (a[mid] == target) return mid;
-        if (a[mid] < target) lo = mid + 1;
-        else hi = mid - 1;
+int binarySearch(const std::vector<int>& a, int target, int start, int end) {
+    if (end < start) return -1;
+    if (end == start) {
+        if (a[start] == target) return start;
+        else return -1;
+    }
+    size_t size = end-start+1;
+    size_t midpt = start + size/ 2;
+    int midValue = a[midpt];
+    if (midValue == target) {
+        return midpt;
+    } else if (target < midValue) {
+        return binarySearch(a, target, start, midpt-1);
+    } else {
+        return binarySearch(a, target, midpt+1, end);
+    }
+}
+
+//    std::vector<int> a{-1, 0, 3, 5, 9, 12};
+int binarySearchIter(const std::vector<int>& a, int target, int start, int end) {
+    if (end < start) return -1;
+    if (end == start) {
+        if (a[start] == target) return start;
+        else return -1;
+    }
+
+    int left = start; 
+    int right = end;
+    while(left <= right) {
+        // if (right < left) return -1;
+        if (left == right) {
+            if (a[left] == target) return left;
+            else return -1;
+        }
+
+        int size = right-left+1;
+        int midpt = left + size/ 2;
+        int midVal = a[midpt];
+        // printf("size %d, left %d, right %d, midpt %d, midVal %d, target %d \n", size, left, right, midpt, midVal, target);
+        if (midVal == target) {
+            return midpt;
+        }
+        else if (target < midVal) {
+            right = midpt-1;
+        } else {
+            left = midpt+1;
+        }
     }
     return -1;
 }
+
 int binarySearch([[maybe_unused]] const std::vector<int>& a, [[maybe_unused]] int target) {
-    // TODO
-    return -2;
+    return binarySearchIter(a, target, 0, (int)a.size()-1);
 }
 
 int main() {

@@ -31,20 +31,41 @@
 
 std::unordered_map<std::string, int> countWords(const std::vector<std::string>& words) {
     (void)words;
-    // TODO
-    return {};
+    std::unordered_map<std::string, int> output;
+    for (std::string word : words) {
+        if (output.find(word) == output.end()) {
+            output[word] = 0;
+        }
+        output[word]++;
+    }
+    return output;
 }
 
 std::string mostFrequent(const std::vector<std::string>& words) {
     (void)words;
     // TODO
-    return "?";
+    std::string output = "";
+    int maxcount = 0;
+    std::unordered_map<std::string, int> wc = countWords(words);
+    for (auto it = wc.begin(); it != wc.end(); ++it){
+        std::string word = it->first;
+        int count = it->second;
+        if (count > maxcount) {
+            output = word;
+            maxcount = count;
+        }
+    }
+    return output;
 }
 
 int firstRepeated(const std::vector<int>& nums) {
     (void)nums;
-    // TODO
-    return -2;
+    std::unordered_set<int> seen;
+    for(int i : nums) {
+        auto [it, inserted] = seen.insert(i);
+        if (!inserted) return i;
+    }
+    return -1;
 }
 
 // Lookup helper for the tests (returns 0 when the key is absent).

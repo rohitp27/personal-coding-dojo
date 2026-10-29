@@ -19,7 +19,7 @@
 //      what single rule makes each element be walked at most once overall?
 //   3. What happens to x - 1 or x + 1 when x is INT_MIN or INT_MAX?
 //
-// Run: make run FILE=curriculum/102_fundamentals/hashing/04_longest_consecutive.cpp
+// Run: make run FILE=practice/cpp/hashing/04_longest_consecutive.cpp
 
 #include "check.h"
 
@@ -30,21 +30,43 @@
 #include <unordered_set>
 #include <vector>
 
-//@REF
-int longestConsecutive(const std::vector<int>& a) {
-    std::unordered_set<long long> s(a.begin(), a.end());
-    int best = 0;
-    for (long long x : s) {
-        if (s.count(x - 1)) continue;
-        int len = 1;
-        while (s.count(x + len)) len++;
-        best = std::max(best, len);
-    }
-    return best;
+int max(int a, int b) {
+    return (a<b)?b:a;
 }
+
 int longestConsecutive([[maybe_unused]] const std::vector<int>& a) {
-    // TODO
-    return -1;
+    std::unordered_set<int> st;
+    int longestSequence = 0;
+    for(int elem : a) {
+        st.insert(elem);
+    }
+    for(auto it = st.begin(); it != st.end(); it++){
+        int current = *it;
+        if (!(current == INT_MIN) && st.find(current-1) != st.end()) {
+            //prev exists,not the start
+            continue;
+        } else {
+            // start of a sequence
+            int next = current;
+            int sequenceLength = 0;
+            while (true) {
+                // keep going till sequence ends
+                if (st.find(next) != st.end()){
+                    // found in seq
+                    sequenceLength++;
+                    if (next == INT_MAX) {
+                        break;
+                    } else {
+                        next++;
+                    }
+                } else {
+                    break;
+                }
+            }
+            longestSequence = max(longestSequence, sequenceLength);
+        }
+    }
+    return longestSequence;
 }
 
 int main() {

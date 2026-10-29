@@ -86,6 +86,25 @@ teaching style. Existing checkpoints below are historical; inspect current work.
 
 ## Coaching checkpoint
 
+### Latest session: 2026-10-29
+
+- Session scope is C++ dojo only. Leave job-search tracking, concurrency, and
+  system-design prep to their separate sessions. Keep handoffs in this repo.
+- Prefer teaching transferable patterns; do not repeatedly quiz solved examples.
+  Rohit writes implementations. Inspect and run current code before short hints.
+- Binary-search exercises 01–04 passed their supplied checks. Discussed monotonic
+  feasibility and searching an answer range. Processing-rate exercise 05 was added;
+  it remains unfinished. Maximum-minimum-spacing practice was planned afterward.
+- AVL insertion in `practice/cpp/trees/01_avl_tree.cpp` passed supplied checks
+  after guided debugging of pointer links, height maintenance, and double-rotation
+  selection. This was assisted completion, not independent mastery.
+- Discussed why the child's inward lean selects a double rotation even when the
+  child is balanced. Use tree drawings if this needs revisiting.
+- Next task: finish reviewing AVL helper null handling; then resume the unfinished
+  processing-rate exercise. Preserve learner code and do not implement fixes.
+
+### Earlier history
+
 This is a starting checkpoint, not a permanent assessment. Inspect the current
 attempt and conversation before deciding what comes next. Update this section as
 milestones change, without recording solutions.
